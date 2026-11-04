@@ -14,6 +14,7 @@
 
 - 快速开始
 - 结果
+- 工程结构
 - 推理速度
 - 模型
 - 模型转换
@@ -38,6 +39,10 @@ pip install -r requirements.txt
 python python/demo.py \
   samples/listen/16k/speech_2_input_16k.wav \
   -o output_48k.wav
+
+# C++（可选，需交叉编译）
+bash cpp/build_ax650.sh
+./cpp/bin/audiosr_ax650 models samples/listen/16k/speech_2_input_16k.wav output_48k_cpp.wav
 ```
 
 输入 8 kHz / 16 kHz 均可；SDK 会重采样到 48 kHz，并按 AudioSR 的 5.12 s 窗口处理后送 NPU。
@@ -56,6 +61,24 @@ AudioSR_AXERA/
 
 ## 结果
 
+### English 16 kHz
+
+| 输入 | AudioSR 输出 |
+|---|---|
+| [▶ 16k input](samples/listen/16k/speech_2_input_16k.wav)<br><img src="samples/listen/spectrograms/speech_2_input_16k_spec.png" width="380"> | [▶ 48k output](samples/listen/output/speech_2_output_48k.wav)<br><img src="samples/listen/spectrograms/speech_2_output_48k_spec.png" width="380"> |
+
+### English 8 kHz
+
+| 输入 | AudioSR 输出 |
+|---|---|
+| [▶ 8k input](samples/listen/8k/OSR_us_000_0010_input_8k.wav)<br><img src="samples/listen/spectrograms/OSR_us_000_0010_input_8k_spec.png" width="380"> | [▶ 48k output](samples/listen/output/OSR_us_000_0010_output_48k.wav)<br><img src="samples/listen/spectrograms/OSR_us_000_0010_output_48k_spec.png" width="380"> |
+
+### 中文 8 kHz
+
+| 输入 | AudioSR 输出 |
+|---|---|
+| [▶ 8k input](samples/listen/8k/OSR_cn_000_0072_input_8k.wav)<br><img src="samples/listen/spectrograms/OSR_cn_000_0072_input_8k_spec.png" width="380"> | [▶ 48k output](samples/listen/output/OSR_cn_000_0072_output_48k.wav)<br><img src="samples/listen/spectrograms/OSR_cn_000_0072_output_48k_spec.png" width="380"> |
+
 ### 精度
 
 | 模块 / 链路 | 板端 vs ONNX/PyTorch |
@@ -66,23 +89,16 @@ AudioSR_AXERA/
 | vocoder 9-model chain | **0.99838** |
 | full AudioSR chain | **0.99169** |
 
-### 示例
-
-| 输入 | 输出 |
-|---|---|
-| [English 16 kHz](samples/listen/16k/speech_2_input_16k.wav) | [48 kHz](samples/listen/output/speech_2_output_48k.wav) |
-| [English 8 kHz](samples/listen/8k/OSR_us_000_0010_input_8k.wav) | 运行 SDK 生成 |
-| [中文 8 kHz](samples/listen/8k/OSR_cn_000_0072_input_8k.wav) | 运行 SDK 生成 |
-
 ## 推理速度
 
-5.12 s 输入、DDIM-10、Python SDK（AX650 NPU3）：
+5.12 s 输入、DDIM-10、AX650 NPU3：
 
 ```text
-约 20–22 s / 5.12 s 音频，RTF ≈ 4.0–4.3
+Python SDK: 约 20–22 s / 5.12 s，RTF ≈ 4.0–4.3
+C++:        约 7.3 s / 5.12 s，RTF ≈ 1.43
 ```
 
-短音频主要受 DDIM 10 步 UNet 和 vocoder 拆分模型调度开销影响；这是当前 Python 参考实现的实测值。
+C++ 全链路已实现：WAV → 重采样 → STFT/log-mel → VAE encoder → DDIM-10 UNet → decoder → 拆分 vocoder → 后处理。构建方式见 [`cpp/README.md`](cpp/README.md)。
 
 ## 模型
 
@@ -100,6 +116,7 @@ AudioSR_AXERA/
 - `voc_split_nhwc_up3_mix.axmodel`：7.7 MB
 - `voc_split_nhwc_up4_mix.axmodel`：5.8 MB
 - `voc_split_nhwc_post_fp32.axmodel`：99 KB
+- `mel_filters_256x1025.bin`：C++ mel 滤波器
 
 详见 [`models/README.md`](models/README.md)。
 

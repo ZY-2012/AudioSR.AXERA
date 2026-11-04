@@ -23,3 +23,9 @@ voc_split_nhwc_post_fp32.axmodel
 
 所有模型均为 Pulsar2 8.0 / AX650 NPU3 编译。vocoder 采用拆分 + 混合精度：
 `pre/post` 为 FP32，`up0/up1` 拆成两段，其余 up2/up3/up4 为混合精度。
+
+C++ 还需要：
+
+```text
+mel_filters_256x1025.bin
+```

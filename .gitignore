@@ -6,3 +6,5 @@ __pycache__/
 models/*.axmodel
 *.wav
 !samples/**/*.wav
+cpp/build/
+cpp/bin/
