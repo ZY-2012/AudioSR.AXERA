@@ -9,7 +9,7 @@ def main():
     p.add_argument("input")
     p.add_argument("-o","--output",default=None)
     p.add_argument("--models",default=os.path.join(os.path.dirname(__file__),"..","models"))
-    p.add_argument("--ddim",default=os.path.join(os.path.dirname(__file__),"..","model_convert","audiosr_ddim_10.npz"))
+    p.add_argument("--ddim",default=os.path.join(os.path.dirname(__file__),"..","models","audiosr_ddim_10.npz"))
     p.add_argument("--seed",type=int,default=42)
     a=p.parse_args()
     m=AudioSR(os.path.abspath(a.models),seed=a.seed,ddim=os.path.abspath(a.ddim))

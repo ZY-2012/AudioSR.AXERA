@@ -105,7 +105,7 @@ def make_batch(path):
 
 
 class AudioSR:
-    def __init__(self, model_dir, seed=42, ddim="model_convert/audiosr_ddim_10.npz"):
+    def __init__(self, model_dir, seed=42, ddim="models/audiosr_ddim_10.npz"):
         import axengine
         self.axengine = axengine
         self.dir = Path(model_dir)
