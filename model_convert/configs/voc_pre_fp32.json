@@ -1,0 +1,48 @@
+{
+  "model_type": "ONNX",
+  "target_hardware": "AX650",
+  "npu_mode": "NPU3",
+  "input": "/workspace/models/voc_split_nhwc_pre.onnx",
+  "output_dir": "/workspace/build/compile/voc_pre_fp32",
+  "output_name": "model.axmodel",
+  "work_dir": "/workspace/build/compile/voc_pre_fp32_work",
+  "input_shapes": "mel:1x512x256",
+  "onnx_opt": {
+    "disable_onnx_optimization": false,
+    "enable_onnxsim": false,
+    "model_check": true
+  },
+  "quant": {
+    "calibration_method": "MinMax",
+    "precision_analysis": true,
+    "precision_analysis_method": "EndToEnd",
+    "highest_mix_precision": false,
+    "layer_configs": [
+      {
+        "start_tensor_names": [
+          "DEFAULT"
+        ],
+        "end_tensor_names": [
+          "DEFAULT"
+        ],
+        "data_type": "FP32",
+        "weight_data_type": "FP32",
+        "output_data_type": "FP32"
+      }
+    ],
+    "input_configs": [
+      {
+        "tensor_name": "mel",
+        "calibration_dataset": "/workspace/build/calib/voc_split_nhwc/pre.tar.gz",
+        "calibration_format": "Numpy",
+        "calibration_size": 8,
+        "calibration_mean": [],
+        "calibration_std": []
+      }
+    ]
+  },
+  "input_processors": [],
+  "compiler": {
+    "check": 0
+  }
+}

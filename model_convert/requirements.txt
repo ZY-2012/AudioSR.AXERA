@@ -1,0 +1,11 @@
+numpy
+onnx
+onnxsim
+onnxruntime
+torch
+torchaudio
+librosa
+soundfile
+scipy
+pyyaml
+huggingface_hub

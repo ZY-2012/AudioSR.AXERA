@@ -1,0 +1,75 @@
+{
+  "model_type": "ONNX",
+  "target_hardware": "AX650",
+  "npu_mode": "NPU3",
+  "input": "/workspace/models/voc_split_nhwc_up3.onnx",
+  "output_dir": "/workspace/build/compile/voc_split_nhwc_up3_mix",
+  "output_name": "model.axmodel",
+  "work_dir": "/workspace/build/compile/voc_split_nhwc_up3_mix_work",
+  "input_shapes": "x_up3:1x61444x192",
+  "onnx_opt": {
+    "disable_onnx_optimization": false,
+    "enable_onnxsim": false,
+    "model_check": true
+  },
+  "quant": {
+    "calibration_method": "MinMax",
+    "precision_analysis": true,
+    "precision_analysis_method": "EndToEnd",
+    "highest_mix_precision": false,
+    "layer_configs": [
+      {
+        "op_type": "ConvTranspose",
+        "data_type": "FP32",
+        "weight_data_type": "S8",
+        "output_data_type": "FP32"
+      },
+      {
+        "op_type": "Conv",
+        "data_type": "FP32",
+        "weight_data_type": "S8",
+        "output_data_type": "FP32"
+      },
+      {
+        "op_type": "Add",
+        "data_type": "FP32",
+        "output_data_type": "FP32"
+      },
+      {
+        "op_type": "Mul",
+        "data_type": "FP32",
+        "output_data_type": "FP32"
+      },
+      {
+        "op_type": "LeakyRelu",
+        "data_type": "FP32",
+        "output_data_type": "FP32"
+      },
+      {
+        "start_tensor_names": [
+          "DEFAULT"
+        ],
+        "end_tensor_names": [
+          "DEFAULT"
+        ],
+        "data_type": "U16",
+        "weight_data_type": "S8",
+        "output_data_type": "U16"
+      }
+    ],
+    "input_configs": [
+      {
+        "tensor_name": "x_up3",
+        "calibration_dataset": "/workspace/build/calib/voc_split_nhwc/up3.tar.gz",
+        "calibration_format": "Numpy",
+        "calibration_size": 8,
+        "calibration_mean": [],
+        "calibration_std": []
+      }
+    ]
+  },
+  "input_processors": [],
+  "compiler": {
+    "check": 0
+  }
+}
