@@ -5,7 +5,7 @@
 ![AX650](https://img.shields.io/badge/AX650-NPU3-blue) ![vocoder](https://img.shields.io/badge/vocoder%20corr-0.9984-brightgreen) ![full](https://img.shields.io/badge/full%20chain%20corr-0.9917-brightgreen) [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97-AudioSR.AXERA-yellow)](https://huggingface.co/HY-2012/AudioSR.AXERA)
 
 - HuggingFace（模型从这里下载）：<https://huggingface.co/HY-2012/AudioSR.AXERA>
-- GitHub：<https://github.com/ZY-2012/AudioSR_AXERA>
+- GitHub：<https://github.com/ZY-2012/AudioSR.AXERA>
 - 上游：<https://github.com/haoheliu/versatile_audio_super_resolution>
 - 输入：8 / 16 / 24 / 48 kHz 单声道或立体声 WAV；输出：48 kHz
 - 5.12 s 输入，AudioSR DDIM-10；vocoder 拆成 9 个小模型以适配 AX650 内存和精度
@@ -13,7 +13,7 @@
 > **AX650 板端实测说明**：AudioSR、LavaSR、FlowHigh 均已在 AX650N / NPU3 板端跑通。综合效果和速度最好的是 **LavaSR**：C++ 全链路 RTF ≈ 0.061（约 16× 实时），支持 8–48 kHz → 48 kHz 和降噪。**推荐优先使用 LavaSR。**
 >
 > **对比入口**
-> GitHub: [LavaSR](https://github.com/ZY-2012/LavaSR.AXERA) · [FlowHigh](https://github.com/ZY-2012/FlowHigh.AXERA) · [AudioSR](https://github.com/ZY-2012/AudioSR_AXERA)
+> GitHub: [LavaSR](https://github.com/ZY-2012/LavaSR.AXERA) · [FlowHigh](https://github.com/ZY-2012/FlowHigh.AXERA) · [AudioSR](https://github.com/ZY-2012/AudioSR.AXERA)
 > HuggingFace: [LavaSR](https://huggingface.co/HY-2012/LavaSR.AXERA) · [FlowHigh](https://huggingface.co/HY-2012/FlowHigh.AXERA) · [AudioSR](https://huggingface.co/HY-2012/AudioSR.AXERA)
 
 ## 目录
@@ -33,7 +33,7 @@
 
 ```bash
 # 模型目录结构
-# AudioSR_AXERA/
+# AudioSR.AXERA/
 # └── models/
 #     ├── audiosr_unet.axmodel
 #     ├── audiosr_vae_encoder_nhwc.axmodel
@@ -56,7 +56,7 @@ bash cpp/build_ax650.sh
 ## 工程结构
 
 ```text
-AudioSR_AXERA/
+AudioSR.AXERA/
 ├── model_convert/       # ONNX 导出 → 拆分 → 校准数据 → Pulsar2 U16 量化
 ├── python/              # Python 板端推理 SDK（axengine）
 ├── cpp/                 # C++ 板端推理源码 + 交叉编译脚本
